@@ -33,4 +33,4 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-mainClassName = 'Non.blocking.server.Starter'
+mainClassName = 'Non.blocking.server.RunServer'
