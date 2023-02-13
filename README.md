@@ -7,6 +7,7 @@ Some interesting ideas from https://jenkov.com/tutorials/java-nio/non-blocking-s
 An example of client for this server is 
 
 Connection protocol:
+------
 
 Client                                                        Server
 ======                                                        ======
