@@ -2,6 +2,8 @@
 
 Just a little test. How could be a non-blocking server.
 
+RunServer class autokills server after some thread sleeping time.
+
 Some interesting ideas from https://jenkov.com/tutorials/java-nio/non-blocking-server.html
 
 An example of client for this server is 
