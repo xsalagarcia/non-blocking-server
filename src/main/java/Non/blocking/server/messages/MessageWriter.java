@@ -26,14 +26,13 @@ public class MessageWriter {
 	 * Enqueues a new message (@code ByteBuffer}. If there is not a {@code this.messageByteBufferInProgress}, will be it.
 	 * If there is a {@code this.messageByteBufferInProgress}, the message will be enqueued at {@code this.messageBufferQueue}.
 	 * @param messageByteBuffer A message.
-	 * @throws Exception If there was too many messages on the queue.
 	 */
 	private void enqueue(ByteBuffer messageByteBuffer) {
 		messageByteBuffer.flip();
 		if (messageByteBufferInProgress == null) {
 			this.messageByteBufferInProgress = messageByteBuffer;
 		} else {
-			messageBufferQueue.add(messageByteBuffer); //will throw Exception if it's not possible to add a new element.
+			messageBufferQueue.add(messageByteBuffer); //will throw Exception if it's not possible to add a new element to the queue.
 		}
 	}
 
@@ -43,10 +42,14 @@ public class MessageWriter {
 	 * If it's fully sent, removes it put the next from {@code this.messageBufferQueue} or null if the queue is empty.
 	 * @throws IOException If some other I/O error occurs
 	 */
-	public void write () throws IOException {
+	public void write () throws ServerException {
 
 		if (this.messageByteBufferInProgress != null) {
-			socket.socketChannel.write(this.messageByteBufferInProgress);
+			try {
+				socket.socketChannel.write(this.messageByteBufferInProgress);
+			} catch (Exception e){
+				throw new ServerException(ServerException.Type.CONNECTION_PROBLEM);
+			}
 			if (!this.messageByteBufferInProgress.hasRemaining()) {
 				this.messageByteBufferInProgress = messageBufferQueue.poll();
 			}
@@ -54,20 +57,6 @@ public class MessageWriter {
 			this.messageByteBufferInProgress = messageBufferQueue.poll();
 		}
 	}
-
-	/**
-	 * Tries to enqueue a message to send.
-	 * @param messageType
-	 * @param bundle
-	 * @throws Exception If couldn't put the message on the messagueBufferQueue.
-	 */
-	/*public void enqueueMessage(MessageType messageType, byte[] bundle) throws Exception {
-		ByteBuffer bb = ByteBuffer.allocate(bundle.length + 5);
-		bb.put(messageType.byteValue);
-		bb.putInt(bundle.length);
-		bb.put(bundle);
-		enqueue(bb);
-	}*/
 
 	/**
 	 * Tries to enqueue a message to send.

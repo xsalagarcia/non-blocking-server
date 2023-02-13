@@ -46,7 +46,7 @@ public class Socket {
 	private Cipher secretKeyCipherEncryptor = null;
 
 	/**The MAC algorithm for client-server communication*/
-	private static Mac mac = null;
+	private Mac mac = null;
 
 	private int allowedErrors = 3; //just for some kind of errors, managed on read().
 
@@ -95,8 +95,12 @@ public class Socket {
 	public void write()  {
 		try {
 			messageWriter.write();
-		} catch (IOException e) {
-			// TODO HERE MANAGE ALL KIND OF WRITING EXCEPTIONS.
+		} catch (ServerException e) { //Connection problems.
+			try {
+				socketChannel.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 			e.printStackTrace();
 		}
 	}
@@ -111,23 +115,8 @@ public class Socket {
 		return !messageWriter.isEmpty();
 	}
 
-
-	/**
-	 * //TODO
-	 */
-	/*public void sendAllUsers() {
-		byte[] bytes =  loggedSockets.keySet().toArray().toString().getBytes(StandardCharsets.UTF_8);
-
-		try {
-			messageWriter.enqueueMessage(MessageType.TEXT, bytes);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}*/
-
 	/**Moves this Socket to the nonLoggedSockets and makes the userName null.*/
-	public void unlog() {
+	public void unlogMe() {
 		loggedSockets.remove(userName);
 		nonLoggedSockets.add(this);
 		userName = null;
@@ -198,7 +187,8 @@ public class Socket {
 	public void setMacGenerator(byte[] keyForMac) {
 		try {
 			mac = Mac.getInstance("HmacSHA256");
-			mac.init(new SecretKeySpec(keyForMac, "RawBytes"));
+			//mac.init(new SecretKeySpec(keyForMac, "RawBytes"));
+			mac.init(new SecretKeySpec(keyForMac, "HmacSHA256" ));
 		} catch (NoSuchAlgorithmException | InvalidKeyException e){
 			e.printStackTrace();
 		}

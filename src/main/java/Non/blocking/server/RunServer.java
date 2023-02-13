@@ -11,7 +11,7 @@ public class RunServer {
 			s.start();
 
 			try {
-				Thread.sleep(5*60*1000);
+				Thread.sleep(5*60*1000); //AUTOFINISH!
 				s.socketAccepter.stop();
 				s.socketProcessor.stop();
 			} catch (InterruptedException e) {

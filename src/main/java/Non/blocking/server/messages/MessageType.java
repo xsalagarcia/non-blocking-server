@@ -13,13 +13,13 @@ public enum MessageType {
 	//new user creation TODO
 	NEW_USER(4, 1*1024),
 	//a string representing a destination.
-	ENCRYPTED_TEXT(4, 1*1024),
+	ENCRYPTED_TEXT(5, 1*1024),
 	//A string
-	TEXT(5, 1*1024),
+	TEXT(6, 1*1024),
 	//solicits a response with all users.
-	ALL_USERS(6, 0),
-	ACK(7, 0), //acknowledgement. Not encrypted
-	NACK(8, 0) ; //negative acknowledgement.
+	ALL_USERS(7, 0),
+	ACK(8, 0), //acknowledgement. Not encrypted
+	NACK(9, 0) ; //negative acknowledgement.
 
 	public final byte byteValue;
 	public final int maxLength;

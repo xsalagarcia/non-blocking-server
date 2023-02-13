@@ -1,10 +1,7 @@
 package Non.blocking.server.messages;
 
 import Non.blocking.server.ServerException;
-import Non.blocking.server.Socket;
-
 import javax.crypto.*;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Arrays;
@@ -87,16 +84,17 @@ public abstract class MessageUtilities {
      * @throws BadPaddingException
      */
     public static byte[] decryptWithPrivateKey(byte[] bytes) throws ServerException {
-        if (cipherForDecryptWithPrivate == null) {
-            try {
+
+        try {
+            if (cipherForDecryptWithPrivate == null) {
                 cipherForDecryptWithPrivate = Cipher.getInstance(DEFAULT_PAIR_KEY_ALGORITHM);
                 cipherForDecryptWithPrivate.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
-                return cipherForDecryptWithPrivate.doFinal(bytes);
-            } catch (Exception e) {
-                throw new ServerException(ServerException.Type.PRIVATE_KEY_PROBLEM);
             }
+            return cipherForDecryptWithPrivate.doFinal(bytes);
+        } catch (Exception e) {
+            throw new ServerException(ServerException.Type.PRIVATE_KEY_PROBLEM);
         }
-        return null;
+
     }
 
     /**

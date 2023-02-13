@@ -35,10 +35,13 @@ public class MessageReader {
 	/**Content type. From MessageType values > 1*/
 	private byte[] bundle = null;
 
-	private Socket socket = null;
+	/**Associated socket*/
+	private Socket socket;
 
-	private String userName = null;
-
+	/**
+	 * Constructor.
+	 * @param socket {@code Socket} to be associated.
+	 */
 	public MessageReader(Socket socket) {
 		this.socket = socket;
 	}
@@ -48,7 +51,7 @@ public class MessageReader {
 	 * Tries to read a message. First, it needs MessageType == TO.
 	 * Second, tries to get the message.
 	 * Third, processes the message.
-	 * @throws Exception
+	 * @throws ServerException
 	 */
 	public void readMessage () throws ServerException {
 
@@ -73,7 +76,7 @@ public class MessageReader {
 
 
 	/**Tries to read the MessageType. First five bytes: Type and length.
-	 * @throws Exception
+	 * @throws ServerException
 	 */
 	private void readTypeAndLength() throws ServerException{
 		try {

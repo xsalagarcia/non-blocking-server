@@ -14,8 +14,17 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 
+/**
+ * Only static methods. Given a message, processes it.
+ */
 public abstract class MessageProcessor {
 
+    /**
+     * Entry function to process a message.
+     * @param message
+     * @param socket
+     * @throws ServerException
+     */
     public static void processIncomingMessage(Message message, Socket socket) throws ServerException {
 
         switch (message.messageType){

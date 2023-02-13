@@ -2,9 +2,6 @@ package Non.blocking.server.messages;
 
 import Non.blocking.server.ServerException;
 import Non.blocking.server.Socket;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -13,10 +10,20 @@ import java.util.Arrays;
  * Represents a message.
  */
 public class Message {
+
+    /**Message type*/
     public MessageType messageType;
+
+    /**Message sender*/
     public String origin;
+
+    /**Message destination, another user or {@code MessageUtilities.SERVER_NAME}*/
     public String destination;
+
+    /**An id number for each message, usually got from {@code MessageUtilities.newMessageId()}*/
     public long messageId;
+
+    /**The message body*/
     public byte[] body;
 
 
@@ -114,6 +121,7 @@ public class Message {
 
         byte[] srcMac = new byte[bb.getInt()];
         bb.get(srcMac);
+
         byte[] calculatedMac = socket.generateMac(new byte[][]{new byte[]{messageType.byteValue}, originInBytes, destinationInBytes, body});
         if (Arrays.compare(srcMac, calculatedMac) != 0)
             throw new ServerException (ServerException.Type.MAC_NOT_EQUAL);
