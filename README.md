@@ -6,8 +6,9 @@ Some interesting ideas from https://jenkov.com/tutorials/java-nio/non-blocking-s
 
 An example of client for this server is 
 
-Connection protocol:
-------
+## Connection protocol
+```
+
 
 Client                                                        Server
 ======                                                        ======
@@ -39,4 +40,6 @@ Client sends User name + password with LOG_IN or NEW_USER message.
            ------------------------------------------------->
              Server sends ACK or NACK and the client is logged or not.
           <-------------------------------------------------
+          
+```
                                                               
