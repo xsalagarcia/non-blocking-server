@@ -9,7 +9,7 @@ An example of client for this server is
 Connection protocol:
 
 Client                                                        Server
-------                                                        ------
+======                                                        ======
                         Connect
           --------------------------------------------------> Server creates a welcome message
                 Public key + client socket Id in a WELCOME message
