@@ -19,7 +19,8 @@ public enum MessageType {
 	//solicits a response with all users.
 	ALL_USERS(7, 0),
 	ACK(8, 0), //acknowledgement. Not encrypted
-	NACK(9, 0) ; //negative acknowledgement.
+	NACK(9, 0), //negative acknowledgement.
+	BYE (10, 0); //client sends disconnection message.
 
 	public final byte byteValue;
 	public final int maxLength;

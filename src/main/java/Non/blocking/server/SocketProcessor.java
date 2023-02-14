@@ -76,7 +76,7 @@ public class SocketProcessor implements Runnable {
 	 * @throws IOException
 	 */
 	private void executeCycle() throws IOException {
-		deleteNonConnecteds();
+		deleteNonConnecteds();// <--Should be changed. Non connected clients are not detected with socketChannel.isConnected()
 		takeNewSockets();
 		readFromSockets();
 		writeToSockets();
@@ -84,8 +84,10 @@ public class SocketProcessor implements Runnable {
 
 	/**
 	 * Deletes non connected sockets from {@code loggedSockets} and {@code nonLoggedSockets}.
+	 * Doesn't detect if client is closed. Only detects if it's closed by server.
 	 */
 	private void deleteNonConnecteds() {
+
 		Iterator<Socket> iterator = loggedSockets.values().iterator();
 		while (iterator.hasNext()) {
 			Socket s = iterator.next();

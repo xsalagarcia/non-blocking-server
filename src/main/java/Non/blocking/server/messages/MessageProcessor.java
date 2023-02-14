@@ -44,6 +44,10 @@ public abstract class MessageProcessor {
                 if (socket.userName == null) throw new ServerException (ServerException.Type.LOG_IN_NEEDED, message.messageId);
                 processText(message, socket);
                 break;
+            case ENCRYPTED_TEXT:
+                if (socket.userName == null) throw new ServerException (ServerException.Type.LOG_IN_NEEDED, message.messageId);
+                processText(message, socket);
+                break;
             case ALL_USERS:
                 if (socket.userName == null) throw new ServerException (ServerException.Type.LOG_IN_NEEDED, message.messageId);
                 processAllUsers(message, socket);
@@ -110,9 +114,20 @@ public abstract class MessageProcessor {
 
         Socket destinationSocket = socket.loggedSockets.get(message.destination);
 
-        if (destinationSocket == null) new ServerException(ServerException.Type.WRONG_DESTINATION, message.messageId);
+        if (destinationSocket == null) {
 
-        destinationSocket.messageWriter.enqueueMessage(message.getMessageInByteBuffer(socket));
+            socket.messageWriter.enqueueMessage(MessageUtilities.createNACK(
+                    socket.userName, message.messageId, message.destination + " not connected.").
+                    getMessageInByteBuffer(socket));
+
+        } else {
+            destinationSocket.messageWriter.enqueueMessage(message.getMessageInByteBuffer(destinationSocket));
+
+            socket.messageWriter.enqueueMessage(MessageUtilities.createACK(socket.userName, message.messageId).
+                    getMessageInByteBuffer(socket));
+        }
+
+
     }
 
     private static void processAllUsers (Message message, Socket socket) throws ServerException {
