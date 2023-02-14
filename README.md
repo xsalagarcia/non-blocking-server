@@ -6,7 +6,9 @@ RunServer class autokills server after some thread sleeping time.
 
 Some interesting ideas from https://jenkov.com/tutorials/java-nio/non-blocking-server.html
 
-An example of client for this server is 
+An example of client for this server is https://github.com/xsalagarcia/non-blocking-client-for-non-blocking-server
+
+Server can't detect disconnected clients. Disconnection message should be established and SocketProcessor.deleteNonConnecteds() could be modified.
 
 ## Connection protocol
 ```
